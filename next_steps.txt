@@ -1,0 +1,24 @@
+Upon the end of the semester, several primary missions remained:
+
+1) Fix Rockstar's erroneous centering of the high mass halos in the STANDARD
+simulations. This will then allow my density profile program to properly compare
+the density profiles of simulations with and without EMDE.
+
+2) Run convergence tests on boost factor integrals. Specifically the calculation
+of J. The smooth integral is relatively converged using my integration technique.
+It might be beneficial to find better ways altogether to calculate the integrals
+for the top and bottom of the boost factor.
+
+3) Write a script to run through an entire halo catalogue, pulling out the
+particle data for each and calculating the boost factor. Collect the halo mass,
+radius, boost factor, etc. for each. Use this data to collect a boost factor
+mass function, and then ultimately calculate the box boost factor.
+
+Ideas for boost factor/mass calculator:
+Pull contents from largest_halo_data_extractor.py and put it into a loop
+which will iterate across all of the halos instead of the largest one.
+
+Have this script follow the steps outlined for calculating a boost factor,
+but instead of printing to screen, store in a file. This can be parallelized,
+and then the files can all be combined at the end with all the data.
+
