@@ -1,0 +1,25 @@
+1. Run largest_halo_data_extractor.py, giving it as arguments the corresponding ROCKSTAR halo file and the associated gadget snapshot blocks.
+2. Using the *.vis files generated, run block_combine.py to combine them all into one .txt file for visualization.
+3. Use flat_visualize.py or visualize.py with the .txt file to view microhalo
+
+example:
+
+bsub python largest_halo_data_extractor.py rockstar_halos.ascii gadg_.000030_512_dm_010.*
+
+wait until all the jobs finish
+
+bsub python block_combine.py *.vis
+
+wait for this one (slowest one because i haven't figured out how to parallelize)
+
+Transfer the *_final_mesh.txt file onto PERSONAL COMPUTER
+
+python flat_visualize.py *_final_mesh.txt
+
+OR
+
+python visualize.py *_final_mesh.txt
+
+You MUST have installed the mayavi python module in order to use mlab for visualization.
+
+

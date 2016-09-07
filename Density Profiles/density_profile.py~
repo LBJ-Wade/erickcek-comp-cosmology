@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct 13 18:07:58 2015
+
+@author: greensb
+"""
+
+import sys
+import numpy as np
+
+def distance(x,y,z):
+    return np.sqrt(x*x + y*y + z*z)
+
+outfile = open("profile_datapoints.txt","w")
+paramfile = open(sys.argv[2],"rb") # contains particle mass and radius
+partmass = float(paramfile.readline())
+radius = float(paramfile.readline()) #we are checking out to 10 x the radius (comoving)
+redshift = 30.0#raw_input('Input final redshift: ') #figure out how to get this easily
+scale = 1.0 / (1.0 + float(redshift))
+
+with open(sys.argv[1]) as particlefile:
+    particles = [line.split() for line in particlefile]
+    
+
+#below, we make a number of bins, and then run through the particles, finding their radius, and 
+bin_count = 100 #number of bins
+bins = np.zeros(bin_count) #histogram essentially
+for i in range(0,len(particles)):
+    x = float(particles[i][0])
+    y = float(particles[i][1])
+    z = float(particles[i][2])
+    part_bin = np.floor((distance(x,y,z) / radius) * bin_count)
+    if(part_bin >= bin_count):
+        #throw it out because its in the square region and doesnt affect our density profile
+        pass
+    else:
+        bins[part_bin] += 1
+    
+xplot = np.zeros(bin_count)
+yplot = np.zeros(bin_count)
+
+for i in range(0,bin_count):
+    outer_vol = (4.0/3.0 * np.pi)*(((i+1)* radius / bin_count)**3)*(scale**3)
+    inner_vol = (4.0/3.0 * np.pi)*((i* radius / bin_count)**3)*(scale**3)
+    delta_vol = outer_vol - inner_vol
+    density = bins[i] * partmass / delta_vol
+    outfile.write(str(i*radius*scale / bin_count)+" "+str(density)+"\n")
+    xplot[i] = (i+1)*radius*scale / bin_count
+    yplot[i] = density
+    
+#popt, pcov = opt.curve_fit(gen_nfw, xplot, yplot)
+#yfit = gen_nfw(xplot,popt[0],popt[1],popt[2])
+    
+#the particles in bin 0 are from distance 0 to 1/100th of the radius that we're going out to
+#now that we have our histogram of sorts, in order to make it a density profile by plotting it

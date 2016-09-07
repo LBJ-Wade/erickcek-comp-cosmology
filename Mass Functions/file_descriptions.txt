@@ -1,0 +1,35 @@
+find_subhalos.py:
+
+This script takes as input a rockstar halo catalog and the halo ID of interest,
+and then recursively finds the total number of subhalos in the halo.
+
+subhalos_statistics.py:
+
+This script takes as input a rockstar halo catalog and a MATLAB generated list of the halo IDs for the top100 most massive halos, and then finds the
+substructure statistics for this dataset and outputs them.
+
+top100_subhalo_calculator.m:
+This MATLAB script takes as input the halo catalog in question, and sorts
+and extracts the top 100 most massive halos.
+
+MassFunc-compare-Rockstar.py:
+
+This script takes a rockstar halo catalog, and then data generated with Mathematica for the Press-Schecter and Sheth-Tormen mass functions
+in order to compare all 3.
+
+NOTE: the P-S and S-T data files are currently hard-coded in, and this should
+be changed to make it easier to read those in for changing halo catalogs.
+
+
+MassFunc.py:
+
+This script takes in all of the halo catalogs that you are interested in
+plotting together for comparison in the form:
+
+python MassFunc.py catalog1.ascii catalog2.ascii ...
+
+This is nearly the same as Lucas's script, except it now also plots the
+minimum halo mass, which is based on a hard-coded number which changes
+depending on the simulation specs. This should be modified later on
+so that the mass function can be plotted and the minimum mass can be found
+on the fly.

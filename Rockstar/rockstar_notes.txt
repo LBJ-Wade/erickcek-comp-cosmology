@@ -1,0 +1,27 @@
+Look over RockstarRunInstructions to get the idea of how to run Rockstar.
+
+However, instead of copying start.cfg, use the file in this directory named 'rockstar_start_template.cfg'
+This file comes from Andreas, one of Adrienne's colleagues who is an expert with Rockstar.
+
+Change the inbase, outbase, bcg2, etc. according to RockstarRunInstructions
+
+If the run doesn't work properly, shrink the overlap length by an order of magnitude.
+
+We have confirmed that the mass and length conversion to be correct according to gadget's internal units!
+Rockstar is in units of /h, just as gadget is as well.
+
+FORCE_RES IS VERY IMPORTANT -- SOFTENING LENGTH CALCULATOR
+We need to change the FORCE_RES according to the proper softening length for our simulation
+The FORCE_RES is in units of Mpc/h, defined to be 1/30th of the interparticle spacing:
+FORCE_RES =  (.03 * box_size_in_Mpc/h ) / n
+Where n is the particle count: ie 512, 1024...
+For example:
+30pc/h box, n=512, we have a FORCE_RES = 1.758e-9
+
+Remember that the units are in Mpc/h for FORCE_RES/Softening Length
+-----------------------------------------------------------------
+
+The other big note that is important for halo cataloging is that halos of mass less
+than 100 particles cannot be trusted due to numerical instability.
+
+This puts the k_cut regime outside of our current simulation resolution.

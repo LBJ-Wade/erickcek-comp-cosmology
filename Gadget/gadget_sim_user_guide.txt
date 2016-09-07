@@ -1,0 +1,34 @@
+Basic notes on running gadget which differ from the information found in Dayton's directory, according to the problems which arose in the F'15 semester:
+
+0) Killdevil Modules necessary to have loaded:
+
+ 1) null                 3) mvapich_intel/11.1   5) gsl/1.15
+  2) python/2.6.5         4) fftw/2.1.5
+
+
+1) SPECIFIC SCALE FACTOR SNAPSHOTS:
+We have modified one file in the ReadOnly directory of LoadGadget which will allow us to take snapshots linearly in time, so that we can look linearly from z=500 to z=30, regardless of the initial z for the sim.
+
+In this directory is the modified LoadGadget.py file, which contains an extra directory added to the GadgetData class: gen_file
+
+In the directories.txt file which is used to tell gadget the locations of all of our variable files and executables, add a new line:
+gen_file = 'path to file containing scale factors to snapshot'
+
+It is assumed that the file containing the snapshot scale factors has been named outputs_*.txt, where * is up to you.
+
+Next, in the variables.txt file used to give gadget all the relevant parameters, add the following line:
+
+out_code = * #where * is the end of the filename for the snapshot scale factors file referenced above
+
+Ultimately, you add a line to directories.txt and variables.txt so that LoadGadget knows where to look for the list of scale factors.
+You must use the modified LoadGadget.py
+
+2) In order to get the scale factors that you want for a specific set up, use LoadGadget with variables defined with the initial and final redshift that you want the snapshots of, and the number of snapshots you want. Run LoadGadget to set up the directories and ICs, and then find the file in 'parameterfiles/outputs.txt' and take the values stored there (the scale factors that you want) and put them into a file called outputs_*.txt. 
+
+You can then modify your variables to correspond to the redshift that you would like to run the sim at, and re-run LoadGadget to make directories, ICs, and then run gadget using the steps above such that the snapshots are timed properly.
+
+3) Other notes on gadget:
+
+* Most info can be found in Dayton's documentation
+* The Gadget executable naming scheme is such that Gadget2_1024 corresponds to a 512 particle run. The number is doubled
+* Nodes = # of cores / 8. One node = 8 cores!

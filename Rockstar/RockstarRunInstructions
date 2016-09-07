@@ -1,0 +1,36 @@
+One-time setup directions -- skip if you have already done these
+Download the ModifiedRockstar folder from Dropbox and copy it onto Killdevil. Untar the file. In the main folder, execute: make clean
+Then, execute: make
+Still in the main folder, execute: make bgc2
+Download the bgc2codes folder from Dropbox and copy it onto Killdevil. Untar the file. In the folder, execute: gcc -m64 -o bgc2_stats bgc2_stats.c
+Go to your home directory on Killdevil. Open .bashrc. Add the line: PATH=$PATH:/path/to/bgc2codes
+Save and exit the file. Execute: source .bashrc
+Continue to the regular usage instructions.
+
+Beginning of regular usage instruction
+In the ModifiedRockstar folder, there is a file called start.cfg. Copy it to a convenient location, such as the directory containing your snapshots. Open the file.
+Make sure the MASS_DEFINITION matches the one you would like to use. M200c will replicate the default Amiga settings. Other possible options are M200b, M500b, etc.
+Make sure the BOX_SIZE is set to the simulation box size in Mpc/h.
+Set NUM_BLOCKS to the number of files produced per snapshot. For simulations smaller than 512^3, this will be 1. For 512^3, this is 8 and for 1024^3 this is 64.
+Set the INBASE to be the path to the snapshots.
+Then set the FILENAME to be the name of the snapshot, eg. "gadg_512_.000060_dm_010.<block>". Rockstar will automatically find all of the relevant block files for that snapshot.
+To attempt to process multiple snapshots at once, change NUM_SNAPS to the number of snapshots and make the filename be of the form "gadg_512_.000060_dm_<snap>.<block>". This method behaves poorly. I recommend sticking to analyzing 1 snapshot at a time.
+For 512^3 or smaller simulations, set NUM_READERS, NUM_WRITERS, and FORK_PROCESSORS_PER_MACHINE to 8. For 1024^3, set them to 16.
+Set the OUTBASE to where you would like to put the output.
+This file is set up to use bgc2 outputs. These outputs provide some information not available by default, such as the number of particles in each halo. If you would prefer standard outputs, comment out OUTPUT_FORMAT and BGC2_SNAPNAMES.
+If you would like to use bgc2 outputs, set BGC2_SNAPNAMES to point to a text file you will create containing the names of the snapshots you are processing, with one on each line. They will look exactly like the FILENAME examples but without quotes. Yes, this file will only contain 1 line if you are only looking at 1 snapshot.
+Save and exit the file.
+
+While in the directory containing your copy of start.cfg, submit the line: bsub /path/to/rockstar -c start.cfg
+Wait until the job has begun to run. If you use the command bjobs, you can see whether the job status is PEND or RUN.
+Then submit: bsub -M 20 -R "span[hosts=1]" /path/to/rockstar -c /path/to/OUTBASE/auto-rockstar.cfg
+If the job fails due to memory allocation errors, increase the number after the -M, which specifies the number of GB of RAM per processor. If you notice that your jobs are not using this much RAM, you can lower it. 20 is merely a good starting guess.
+If you get errors about the OVERLAP_LENGTH being too large for the BOX_SIZE, shrink the OVERLAP_LENGHT.
+
+If you used BGC2, then go to the OUTBASE. Submit: /path/to/ModifiedRockstar/util/finish_bgc2 -c rockstar.cfg -s *.bgc2
+The above command will finish producing the bgc2 files.
+Then execute: bgc2_stats <MinNumberOfParticles> <OptionFlag> *.bgc2 >> OUTFILE.ascii
+Replace <MinNumerOfParticles> with the minimum number of particles recognized as a halo in your files. By default, this is 20.
+Replace <OptionFlag> with 0 if you would only like information about host halos, 1 for only subhalos, and 2 for both.
+OUTFILE.ascii can be replaced with whatever name you would like for the final output text file.
+This final outfile will have no labels. The columns are in the following order: Halo_ID, Npart, Mass, Radius, Vmax, x, y, z, vx, vy, vz, flag_periodic, host_ID

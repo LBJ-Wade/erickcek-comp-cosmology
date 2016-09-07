@@ -1,0 +1,24 @@
+Initial Install Instructions -- skip if already done
+
+Download ModifiedAHF.tar.gz from Dropbox, copy it onto Killdevil, and untar it.
+In the main directory, submit: make clean
+Then, submit: make
+
+
+
+
+Regular Running Instructions
+
+Copy AHFinput to the location in which you would like Amiga outputs.
+Edit ic_filename to be the path to the snapshot file you would like to analyze. If there are multiple files for your snapshot, stop after the . immediately preceding the block numbers.
+The ic_filetype should be set to 60 if there is only one file and to 61 if there are multiple.
+The outfile_prefix should be set to your preferred naming convention. The files will take the form: <outfile_prefix>.<snapshot_redshift>.<suffix>
+Halo catalogs have the suffix .AHF_halos
+NminPerHalo establishes the minimum number of particles that can constitute a halo. The default for both Amiga and Rockstar is 20.
+RhoVir establishes whether densities should be compared to the critical density or the background density. The default value, 0, corresponds to critical. 1 switches to background.
+Dvir sets the density threshold for what is in a halo. The default is 200. Taken together with RhoVir, this means the default mass definition is M200c.
+Save and exit the file.
+
+Submit: bsub -M 50 /path/to/ModifiedAHF/bin/AHF-v1.0-084 AHFinput
+Pay attention to memory consumption. 50 GB is a good starting point for 512^3 simulations, but some power spectra and box size combinations may take more or less.
+For 1024^3 simulations, more memory will be required. Start with 300 GB as a reasonable guess. This will require the bigmem queue, so be sure to use: -q bigmem

@@ -1,0 +1,5 @@
+We never successfully ran Amiga to completion.
+ It is likely that we will need to figure out how to get Amiga to utilize
+multiple compute nodes, because Rockstar automatically uses as many hosts
+as it needs, but Amiga was stuck on one, which made it run for days without
+completing.

@@ -1,0 +1,21 @@
+1. Run largest_halo_data_extractor and it will output the locations of the particles (we still need to get particle mass somehow)
+2. Run command cat *.particle > all_particles.txt
+3. Run calc_boost_factor.py, which takes all the particles, bins them, and outputs a density profile file, which we can plot on a personal computer.
+
+example:
+
+bsub python largest_halo_data_extractor.py rockstar_halos.ascii gadg_.000030_512_dm_010.*
+
+wait until all the jobs finish
+
+cat *.particle > halo_1_particles.txt
+
+python calc_boost_factor.py halo1_particles.txt halo1_params.txt
+
+The parameter file is generated per halo by largest_halo_data_extractor.py
+
+WITHIN calc_boost_factor.py, there is the same routine as density_profile.py,
+but with the final plotting of the boost factors commented out.
+
+If you would like to both see the density profile and calculate the boost factor,
+simply uncomment that part of the code.

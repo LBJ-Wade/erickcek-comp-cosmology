@@ -1,0 +1,5 @@
+Use the starter script largest_halo_data_extractor.py as a template which
+will instead loop through ALL halos, instead of just the largest one.
+
+Parallelize this to calculate boost factors on many halos at once so that
+the entire sim can be completed fairly quickly.
