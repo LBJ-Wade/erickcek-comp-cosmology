@@ -11,6 +11,11 @@ PROCEDURE FOR VISUALIZING MICROHALOS
 2. Using the *.vis files, run block_combine.py to combine them all into one .txt file for visualization.
 3. Use flat_visualize.py and visualize.py with the .txt file to view microhalo
 
+to pick out a specific halo, look at top 10 largest:
+data=np.loadtxt('halos.ascii')
+data = data[data[:,1].argsort()]
+data = data[len(data)-10:,:]
+
 PROCEDURE FOR GENERATING DENSITY PROFILES
 1. Run this script, same as above, and it will output the locations of the particles (we still need to get particle mass somehow)
 2. Run command cat *.particle > all_particles.txt
@@ -52,6 +57,7 @@ paramfile.write(str(particlemass)+"\n")
 paramfile.write(str(largest_halo[2])+"\n")
 paramfile.write(part_count+"\n")
 paramfile.write(sim_size+"\n")
+paramfile.write(sys.argv[1]+"\n")
 
 #now we have the location of the largest halo, so we can call our gadget block to lattice code to generate the .vis files
 for i in blocks:

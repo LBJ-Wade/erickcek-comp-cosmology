@@ -11,6 +11,11 @@ PROCEDURE FOR VISUALIZING MICROHALOS
 2. Using the *.vis files generated, run block_combine.py to combine them all into one .txt file for visualization.
 3. Use flat_visualize.py and visualize.py with the .txt file to view microhalo
 
+to pick out a specific halo, look at top 10 largest:
+data=np.loadtxt('halos.ascii')
+data = data[data[:,1].argsort()]
+data = data[len(data)-10:,:]
+
 PROCEDURE FOR GENERATING DENSITY PROFILES
 1. Run this script, same as above, and it will output the locations of the particles (we still need to get particle mass somehow)
 2. Run command cat *.particle > all_particles.txt
@@ -44,7 +49,8 @@ for i in range(0,len(data)): #scanning through all the halos
         largest_halo[2] = data[i,3]*1000000 #radius in pc/h
         largest_halo[3] = data[i,5]*1000000 #x These in pc/h
         largest_halo[4] = data[i,6]*1000000 #y
-        largest_halo[5] = data[i,7]*1000000 #z     
+        largest_halo[5] = data[i,7]*1000000 #z
+        largest_halo_id = data[i,0]
         
 #print to a parameter file the radius, particle mass, simulation particle count (ie 1024 or 512), and simulation size (in Mpc/h)
 particlemass = largest_halo[0] / largest_halo[1] #total mass divided by number of particles, in Msun/h or Msun (figure it out)
@@ -52,6 +58,8 @@ paramfile.write(str(particlemass)+"\n")
 paramfile.write(str(largest_halo[2])+"\n")
 paramfile.write(part_count+"\n")
 paramfile.write(sim_size+"\n")
+paramfile.write(largest_halo_id+"\n")
+
 
 #now we have the location of the largest halo, so we can call our gadget block to lattice code to generate the .vis files
 for i in blocks:
